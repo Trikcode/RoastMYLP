@@ -1,0 +1,466 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================
+   ROAST MY LP - CUSTOM THEME
+   Unique colors: Ember Orange + Electric Teal
+   Dark theme: Soft navy (#0b1224 based)
+   ============================================ */
+
+:root {
+  /* ===== LIGHT THEME ===== */
+
+  /* Base colors - Warm cream/white */
+  --background: oklch(0.98 0.005 80);
+  --foreground: oklch(0.15 0.02 260);
+
+  /* Card - Slightly warm white */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0.02 260);
+
+  /* Popover */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.02 260);
+
+  /* Primary - Electric Teal (unique, not common purple) */
+  --primary: oklch(0.7 0.18 180);
+  --primary-foreground: oklch(0.98 0 0);
+
+  /* Secondary - Warm gray */
+  --secondary: oklch(0.94 0.01 80);
+  --secondary-foreground: oklch(0.2 0.02 260);
+
+  /* Muted */
+  --muted: oklch(0.94 0.01 80);
+  --muted-foreground: oklch(0.45 0.02 260);
+
+  /* Accent - Ember Orange (unique, warm and energetic) */
+  --accent: oklch(0.75 0.18 45);
+  --accent-foreground: oklch(0.15 0.02 260);
+
+  /* Destructive - Coral Red */
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  /* Border & Input */
+  --border: oklch(0.88 0.01 80);
+  --input: oklch(0.94 0.01 80);
+  --ring: oklch(0.7 0.18 180);
+
+  /* Radius */
+  --radius: 0.75rem;
+
+  /* ===== CUSTOM ACCENT COLORS ===== */
+  /* Replacing purple/pink with more unique colors */
+
+  /* Ember Orange - Warm, energetic, unique */
+  --ember-orange: oklch(0.75 0.18 45);
+  --ember-deep: oklch(0.6 0.2 35);
+
+  /* Electric Teal - Fresh, modern, not overused */
+  --electric-teal: oklch(0.7 0.18 180);
+  --electric-teal-bright: oklch(0.8 0.15 180);
+
+  /* Coral Flame - Warm accent */
+  --coral-flame: oklch(0.7 0.2 30);
+
+  /* Midnight Navy - For depth */
+  --midnight-navy: oklch(0.2 0.04 260);
+
+  /* Golden Spark - For highlights */
+  --golden-spark: oklch(0.85 0.18 85);
+
+  /* Keep these for compatibility */
+  --electric-cyan: var(--electric-teal);
+  --electric-purple: var(--ember-deep);
+  --electric-pink: var(--coral-flame);
+  --electric-yellow: var(--golden-spark);
+  --electric-green: oklch(0.75 0.2 145);
+  --neon-red: oklch(0.6 0.25 25);
+}
+
+.dark {
+  /* ===== DARK THEME - Soft Navy ===== */
+  /* Based on #0b1224 - not too black, has depth */
+
+  /* Base - Soft navy with subtle warmth */
+  --background: oklch(0.13 0.025 260);
+  --foreground: oklch(0.95 0.01 260);
+
+  /* Card - Slightly lighter navy */
+  --card: oklch(0.17 0.03 260);
+  --card-foreground: oklch(0.95 0.01 260);
+
+  /* Popover */
+  --popover: oklch(0.17 0.03 260);
+  --popover-foreground: oklch(0.95 0.01 260);
+
+  /* Primary - Electric Teal (brighter in dark mode) */
+  --primary: oklch(0.8 0.16 180);
+  --primary-foreground: oklch(0.13 0.025 260);
+
+  /* Secondary - Muted navy */
+  --secondary: oklch(0.22 0.03 260);
+  --secondary-foreground: oklch(0.95 0.01 260);
+
+  /* Muted */
+  --muted: oklch(0.22 0.03 260);
+  --muted-foreground: oklch(0.6 0.02 260);
+
+  /* Accent - Ember Orange (vibrant in dark) */
+  --accent: oklch(0.78 0.2 45);
+  --accent-foreground: oklch(0.13 0.025 260);
+
+  /* Destructive */
+  --destructive: oklch(0.65 0.25 25);
+  --destructive-foreground: oklch(0.95 0 0);
+
+  /* Border & Input */
+  --border: oklch(0.28 0.03 260);
+  --input: oklch(0.22 0.03 260);
+  --ring: oklch(0.8 0.16 180);
+
+  /* Dark theme accent colors */
+  --ember-orange: oklch(0.78 0.2 45);
+  --ember-deep: oklch(0.65 0.22 35);
+  --electric-teal: oklch(0.8 0.16 180);
+  --electric-teal-bright: oklch(0.85 0.14 180);
+  --coral-flame: oklch(0.75 0.22 30);
+  --midnight-navy: oklch(0.13 0.025 260);
+  --golden-spark: oklch(0.88 0.2 85);
+
+  /* Compatibility */
+  --electric-cyan: var(--electric-teal);
+  --electric-purple: var(--ember-deep);
+  --electric-pink: var(--coral-flame);
+  --electric-yellow: var(--golden-spark);
+}
+
+@theme inline {
+  --font-sans: 'Inter', 'Geist', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Geist Mono', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Custom colors for direct use */
+  --color-electric-cyan: var(--electric-teal);
+  --color-electric-purple: var(--ember-deep);
+  --color-electric-pink: var(--coral-flame);
+  --color-electric-yellow: var(--golden-spark);
+  --color-electric-green: var(--electric-green);
+  --color-neon-red: var(--neon-red);
+  --color-ember-orange: var(--ember-orange);
+  --color-electric-teal: var(--electric-teal);
+  --color-coral-flame: var(--coral-flame);
+  --color-midnight-navy: var(--midnight-navy);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    min-height: 100vh;
+  }
+
+  /* Dark mode background gradient */
+  .dark body {
+    background: linear-gradient(
+      180deg,
+      oklch(0.13 0.025 260) 0%,
+      oklch(0.15 0.03 265) 50%,
+      oklch(0.13 0.025 260) 100%
+    );
+  }
+
+  /* Light mode background */
+  body:not(.dark) {
+    background: linear-gradient(
+      180deg,
+      oklch(0.98 0.005 80) 0%,
+      oklch(0.96 0.01 85) 50%,
+      oklch(0.98 0.005 80) 100%
+    );
+  }
+
+  /* Custom scrollbar - Dark */
+  .dark ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    background: oklch(0.15 0.03 260);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      var(--electric-teal),
+      var(--ember-orange)
+    );
+    border-radius: 4px;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      var(--ember-orange),
+      var(--coral-flame)
+    );
+  }
+
+  /* Custom scrollbar - Light */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: oklch(0.94 0.01 80);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      var(--electric-teal),
+      var(--ember-orange)
+    );
+    border-radius: 4px;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+@layer utilities {
+  /* Gradient text - Updated colors */
+  .gradient-text {
+    background: linear-gradient(
+      135deg,
+      var(--electric-teal) 0%,
+      var(--ember-orange) 50%,
+      var(--coral-flame) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Neon glow effects - Updated */
+  .neon-glow-cyan,
+  .neon-glow-teal {
+    box-shadow: 0 0 5px var(--electric-teal),
+      0 0 20px color-mix(in oklch, var(--electric-teal) 50%, transparent),
+      0 0 40px color-mix(in oklch, var(--electric-teal) 25%, transparent);
+  }
+
+  .neon-glow-pink,
+  .neon-glow-coral {
+    box-shadow: 0 0 5px var(--coral-flame),
+      0 0 20px color-mix(in oklch, var(--coral-flame) 50%, transparent),
+      0 0 40px color-mix(in oklch, var(--coral-flame) 25%, transparent);
+  }
+
+  .neon-glow-purple,
+  .neon-glow-ember {
+    box-shadow: 0 0 5px var(--ember-orange),
+      0 0 20px color-mix(in oklch, var(--ember-orange) 50%, transparent),
+      0 0 40px color-mix(in oklch, var(--ember-orange) 25%, transparent);
+  }
+
+  /* Text glow - Updated */
+  .text-glow-cyan,
+  .text-glow-teal {
+    text-shadow: 0 0 10px var(--electric-teal),
+      0 0 20px color-mix(in oklch, var(--electric-teal) 70%, transparent),
+      0 0 40px color-mix(in oklch, var(--electric-teal) 40%, transparent);
+  }
+
+  .text-glow-pink,
+  .text-glow-coral {
+    text-shadow: 0 0 10px var(--coral-flame),
+      0 0 20px color-mix(in oklch, var(--coral-flame) 70%, transparent),
+      0 0 40px color-mix(in oklch, var(--coral-flame) 40%, transparent);
+  }
+
+  /* Red duotone filter for screenshots */
+  .duotone-red {
+    filter: grayscale(100%) sepia(100%) saturate(400%) hue-rotate(-10deg)
+      brightness(0.9) contrast(1.1);
+  }
+
+  /* Glass morphism - Theme aware */
+  .glass {
+    background: color-mix(in oklch, var(--card) 80%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Animated border - Updated colors */
+  .animated-border {
+    position: relative;
+    background: var(--card);
+  }
+
+  .animated-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+      45deg,
+      var(--electric-teal),
+      var(--ember-orange),
+      var(--coral-flame),
+      var(--electric-teal)
+    );
+    background-size: 400% 400%;
+    border-radius: inherit;
+    z-index: -1;
+    animation: gradient-rotate 4s ease infinite;
+  }
+
+  @keyframes gradient-rotate {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  /* Button electric effect */
+  .btn-electric {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .btn-electric::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: 0.5s;
+  }
+
+  .btn-electric:hover::before {
+    left: 100%;
+  }
+
+  /* Grid background - Theme aware */
+  .grid-bg {
+    background-image: linear-gradient(
+        color-mix(in oklch, var(--electric-teal) 5%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in oklch, var(--electric-teal) 5%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 60px 60px;
+  }
+
+  /* Floating animation */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  /* Pulse glow - Updated */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 20px var(--electric-teal),
+        0 0 40px color-mix(in oklch, var(--electric-teal) 50%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 40px var(--ember-orange),
+        0 0 80px color-mix(in oklch, var(--ember-orange) 50%, transparent);
+    }
+  }
+
+  /* Loading animations */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 3s linear infinite;
+  }
+}
