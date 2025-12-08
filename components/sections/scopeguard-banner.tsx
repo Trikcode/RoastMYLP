@@ -7,7 +7,7 @@ export function ScopeGuardBanner() {
 
       <div className='max-w-6xl mx-auto px-4 relative'>
         <a
-          href='https://scopeguard.io'
+          href='#'
           target='_blank'
           rel='noopener noreferrer'
           className='group flex flex-col md:flex-row items-center justify-between gap-4 p-6 rounded-2xl glass border border-border hover:border-primary/30 transition-all'
