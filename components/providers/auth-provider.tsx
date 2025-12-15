@@ -8,7 +8,6 @@ import {
   useCallback,
   type ReactNode,
 } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import type { User, Session } from '@supabase/supabase-js'
 
 interface AuthContextType {
@@ -22,16 +21,7 @@ interface AuthContextType {
   verifyPayment: (sessionId: string) => Promise<boolean>
 }
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  session: null,
-  loading: true,
-  roastsRemaining: 0,
-  isPremium: false,
-  signOut: async () => {},
-  refreshProfile: async () => {},
-  verifyPayment: async () => false,
-})
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -40,44 +30,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [roastsRemaining, setRoastsRemaining] = useState(0)
   const [isPremium, setIsPremium] = useState(false)
 
-  const supabase = createClient()
+  const loadMe = useCallback(async () => {
+    try {
+      setLoading(true)
 
-  const fetchProfile = useCallback(
-    async (userId: string) => {
-      try {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('roasts_remaining, is_premium')
-          .eq('id', userId)
-          .single()
+      const res = await fetch('/api/auth/me', {
+        credentials: 'include',
+      })
+      const data = await res.json()
 
-        if (profile) {
-          setRoastsRemaining(
-            profile.is_premium ? 999999 : profile.roasts_remaining
-          )
-          setIsPremium(profile.is_premium)
-          console.log('[AuthProvider] Profile loaded:', profile)
-        }
-      } catch (error) {
-        console.error('[AuthProvider] Error fetching profile:', error)
+      if (data.user) {
+        setUser(data.user)
+        setSession(null) // optional, or extend /me to return it
+
+        const profile = data.profile ?? {}
+        setRoastsRemaining(
+          profile.is_premium ? 999999 : profile.roasts_remaining ?? 0
+        )
+        setIsPremium(!!profile.is_premium)
+        console.log('[AuthProvider] User loaded:', data.user.email)
+      } else {
+        console.log('[AuthProvider] No authenticated user')
+        setUser(null)
+        setSession(null)
+        setRoastsRemaining(0)
+        setIsPremium(false)
       }
-    },
-    [supabase]
-  )
+    } catch (error) {
+      console.error('[AuthProvider] Init error:', error)
+      setUser(null)
+      setSession(null)
+      setRoastsRemaining(0)
+      setIsPremium(false)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadMe()
+  }, [loadMe])
 
   const refreshProfile = useCallback(async () => {
-    if (user) {
-      console.log('[AuthProvider] Refreshing profile...')
-      await fetchProfile(user.id)
-    }
-  }, [user, fetchProfile])
+    await loadMe()
+  }, [loadMe])
 
-  // Verify payment and update profile
   const verifyPayment = useCallback(
     async (sessionId: string): Promise<boolean> => {
       try {
-        console.log('[AuthProvider] Verifying payment session:', sessionId)
-
         const response = await fetch('/api/checkout/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -91,9 +91,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return false
         }
 
-        console.log('[AuthProvider] Payment verified:', data)
-
-        // Update local state
         setRoastsRemaining(data.isPremium ? 999999 : data.roastsRemaining)
         setIsPremium(data.isPremium)
 
@@ -107,74 +104,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut()
+    await fetch('/api/auth/signout', { method: 'POST' })
     setUser(null)
     setSession(null)
     setRoastsRemaining(0)
     setIsPremium(false)
-  }, [supabase])
-
-  useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        console.log('[AuthProvider] Initializing...')
-
-        const {
-          data: { session: currentSession },
-        } = await supabase.auth.getSession()
-
-        if (currentSession?.user) {
-          console.log(
-            '[AuthProvider] Session found:',
-            currentSession.user.email
-          )
-          setSession(currentSession)
-          setUser(currentSession.user)
-          await fetchProfile(currentSession.user.id)
-        } else {
-          const {
-            data: { user: currentUser },
-          } = await supabase.auth.getUser()
-
-          if (currentUser) {
-            console.log('[AuthProvider] User found:', currentUser.email)
-            setUser(currentUser)
-            await fetchProfile(currentUser.id)
-          } else {
-            console.log('[AuthProvider] No authenticated user')
-          }
-        }
-      } catch (error) {
-        console.error('[AuthProvider] Init error:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    initializeAuth()
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, newSession) => {
-      console.log('[AuthProvider] Auth state changed:', event)
-
-      setSession(newSession)
-      setUser(newSession?.user ?? null)
-
-      if (newSession?.user) {
-        await fetchProfile(newSession.user.id)
-      } else {
-        setRoastsRemaining(0)
-        setIsPremium(false)
-      }
-
-      setLoading(false)
-    })
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [supabase, fetchProfile])
+  }, [])
 
   return (
     <AuthContext.Provider
@@ -195,9 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error('useAuth must be used within an AuthProvider')
+  return ctx
 }
